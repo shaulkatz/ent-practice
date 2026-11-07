@@ -76,11 +76,12 @@ function exams(id){
     practice();
     return;
   }
-  const entries=reconstructionSets.map(item=>{
+  const cards=items=>items.map(item=>{
     const count=questions.filter(q=>q.topic===item.id).length;
-    return '<section class="exam-panel"><h2>'+safe(item.title)+'</h2><p>'+safe(item.origin)+'</p><p>'+(count?count+' שאלות מעובדות מתוך '+item.total+' במקור':'המקור אותר וממתין לקליטה')+'</p>'+(count?'<a class="primary" href="#exams/'+item.id+'">לתרגול השחזור ←</a> ':'')+(item.url?'<a href="'+safe(item.url)+'" target="_blank" rel="noopener">תיקיית המקור ב־Drive</a>':'')+'</section>';
+    const status=count ? count+' שאלות מעובדות'+(item.total?' מתוך '+item.total+' במקור':'') : 'המקור אותר וממתין לקליטה';
+    return '<section class="exam-panel"><h3>'+safe(item.title)+'</h3><p>'+safe(item.origin)+'</p><p>'+status+'</p>'+(count?'<a class="primary" href="#exams/'+item.id+'">'+(item.opening?'לתרגול בוחן הפתיחה':'לתרגול השחזור')+' ←</a> ':'')+'<a href="'+safe(item.url)+'" target="_blank" rel="noopener">תיקיית המקור ב־Drive</a></section>';
   }).join('');
-  main.innerHTML='<a class="back" href="#home">חזרה לנושאים</a><header class="chapter-header"><h1>שחזורי בחינות</h1><p>בחרו שחזור לפי הכותרת הפנימית, התאריך או הנוסח. הגישה לתיקיות המקור כפופה להרשאות ב־Drive.</p></header><div class="recon-list">'+entries+'</div>';
+  main.innerHTML='<a class="back" href="#home">חזרה לנושאים</a><header class="chapter-header"><h1>שחזורי בחינות</h1><p>בחרו בוחן פתיחה או שחזור לפי המועד והנוסח. הגישה לתיקיות המקור כפופה להרשאות ב־Drive.</p></header><section><h2>בחני פתיחה</h2><div class="recon-list">'+cards(reconstructionSets.filter(item=>item.opening))+'</div></section><section><h2>שחזורים נוספים</h2><div class="recon-list">'+cards(reconstructionSets.filter(item=>!item.opening))+'</div></section>';
 }
 function settings(stage){
   const chapter=chapters[activeTopic];
