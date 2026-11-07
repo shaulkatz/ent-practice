@@ -78,7 +78,7 @@ function exams(id){
   }
   const entries=reconstructionSets.map(item=>{
     const count=questions.filter(q=>q.topic===item.id).length;
-    return '<section class="exam-panel"><h2>'+safe(item.title)+'</h2><p>'+safe(item.origin)+'</p><p>'+(count?count+' שאלות מעובדות מתוך '+item.total+' במקור':'המקור אותר וממתין לקליטה')+'</p>'+(count?'<a class="primary" href="#exams/'+item.id+'">לתרגול השחזור ←</a> ':'')+'<a href="'+safe(item.url)+'" target="_blank" rel="noopener">תיקיית המקור ב־Drive</a></section>';
+    return '<section class="exam-panel"><h2>'+safe(item.title)+'</h2><p>'+safe(item.origin)+'</p><p>'+(count?count+' שאלות מעובדות מתוך '+item.total+' במקור':'המקור אותר וממתין לקליטה')+'</p>'+(count?'<a class="primary" href="#exams/'+item.id+'">לתרגול השחזור ←</a> ':'')+(item.url?'<a href="'+safe(item.url)+'" target="_blank" rel="noopener">תיקיית המקור ב־Drive</a>':'')+'</section>';
   }).join('');
   main.innerHTML='<a class="back" href="#home">חזרה לנושאים</a><header class="chapter-header"><h1>שחזורי בחינות</h1><p>בחרו שחזור לפי הכותרת הפנימית, התאריך או הנוסח. הגישה לתיקיות המקור כפופה להרשאות ב־Drive.</p></header><div class="recon-list">'+entries+'</div>';
 }
@@ -125,7 +125,7 @@ function answer(index){
 function feedback(q){
   const exam=reconstructionSets.find(item=>item.id===q.topic);
   const source=exam
-    ? '<p class="source">שאלה '+q.number+' במקור, עמ׳ '+q.page+' · <a href="'+safe(exam.url)+'" target="_blank" rel="noopener">תיקיית המקור</a></p>'
+    ? '<p class="source">שאלה '+q.number+' במקור'+(q.page?', עמ׳ '+q.page:'')+(exam.url?' · <a href="'+safe(exam.url)+'" target="_blank" rel="noopener">תיקיית המקור</a>':'')+'</p>'
     : '<p class="source"><a href="'+presentationPath()+'" download>מצגת הפרק (PowerPoint)</a></p>';
   return '<section class="feedback"><p class="explanation">'+safe(q.e)+'</p>'+(q.clarification?'<p class="explanation">'+safe(q.clarification)+'</p>':'')+'<h3>הסבר לכל אפשרות</h3><ol class="review">'+q.a.map((a,i)=>'<li><strong>'+letters[i]+'. '+safe(a)+'</strong><p>'+safe(q.x[i])+'</p></li>').join('')+'</ol>'+source+'</section>';
 }
